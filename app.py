@@ -14,37 +14,32 @@ CORS(app)
 # Путь к фронтенду
 FRONTEND_PATH = os.path.join(os.path.dirname(__file__), 'frontend')
 
-# Попробуем разные зеркала
+# Список зеркал
 HDREZKA_MIRRORS = [
     "https://hdrezka.ag",
     "https://hdrezka.co",
     "https://hdrezka.in",
     "https://rezka.ag",
+    "https://rezka.me",
+    "https://hdrezka.me",
 ]
 
-def get_working_mirror():
+def get_searcher():
+    """Получить рабочий поисковый движок"""
+    last_exception = None
     for mirror in HDREZKA_MIRRORS:
         try:
-            import requests
-            r = requests.get(mirror, timeout=5)
-            if r.status_code == 200:
-                return mirror
-        except:
-            continue
-    return HDREZKA_MIRRORS[0]
-
-HDREZKA_ORIGIN = get_working_mirror()
-print(f"Using mirror: {HDREZKA_ORIGIN}")
+            print(f"Trying mirror: {mirror}")
+            return HdRezkaSearch(mirror), mirror
+        except Exception as e:
+            print(f"Mirror {mirror} failed: {e}")
+            last_exception = e
+    raise last_exception or Exception("No working mirrors")
 
 
 @app.route('/')
 def index():
     return send_from_directory(FRONTEND_PATH, 'index.html')
-
-
-@app.route('/<path:filename>')
-def static_files(filename):
-    return send_from_directory(FRONTEND_PATH, filename)
 
 
 @app.route('/api/search', methods=['GET'])
@@ -54,10 +49,11 @@ def search():
         return jsonify({'error': 'Query parameter is required'}), 400
     
     try:
-        searcher = HdRezkaSearch(HDREZKA_ORIGIN)
+        searcher, _ = get_searcher()
         results = searcher(query)
         return jsonify({'success': True, 'results': results})
     except Exception as e:
+        print(f"Search error: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
@@ -97,6 +93,7 @@ def get_item():
         
         return jsonify({'success': True, 'item': item_info})
     except Exception as e:
+        print(f"Item error: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
@@ -140,6 +137,7 @@ def get_stream():
         
         return jsonify({'success': True, 'stream': stream_info})
     except Exception as e:
+        print(f"Stream error: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
@@ -147,3 +145,4 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('DEBUG', 'False').lower() == 'true'
     app.run(debug=debug, port=port, host='0.0.0.0')
+
