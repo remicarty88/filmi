@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>88 sim - смотреть фильмы и сериалы</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo" onclick="showSearchResults(); return false;">
+                        <span class="logo-text">88</span>
+                        <span class="logo-accent">sim</span>
+                    </a>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Поиск фильмов, сериалов, мультфильмов..." class="search-input">
+                        <button id="searchBtn" class="search-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- Search Results -->
+                <div id="searchResults" class="search-results">
+                    <div class="welcome-section">
+                        <h1 class="welcome-title">Добро пожаловать в 88 sim</h1>
+                        <p class="welcome-subtitle">Найди и смотри любимые фильмы и сериалы</p>
+                    </div>
+                </div>
+
+                <!-- Item Detail -->
+                <div id="itemDetail" class="item-detail" style="display: none;"></div>
+
+                <!-- Player -->
+                <div id="playerSection" class="player-section" style="display: none;">
+                    <button class="back-btn" onclick="showItemDetail()">← Назад</button>
+                    <div class="player-container">
+                        <video id="videoPlayer" class="video-player" controls>
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    </div>
+                    <div class="qualities-container">
+                        <h3 class="section-title">🎬 Выберите качество</h3>
+                        <div id="qualityButtons" class="quality-buttons"></div>
+                    </div>
+                    <div id="subtitlesContainer" class="subtitles-container" style="display: none;">
+                        <h3 class="section-title">📝 Субтитры</h3>
+                        <div id="subtitleButtons" class="subtitle-buttons"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading -->
+        <div id="loading" class="loading-overlay" style="display: none;">
+            <div class="spinner"></div>
+            <p class="loading-text">Загрузка...</p>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
