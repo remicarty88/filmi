@@ -64,7 +64,7 @@ function displaySearchResults(results) {
     
     searchResults.innerHTML = results.map(item => `
         <div class="result-card" onclick="loadItem('${item.url}')">
-            <img src="${item.image || 'https://via.placeholder.com/220x310?text=No+Image'}" alt="${item.title}">
+            <img src="${item.image || ''}" alt="${item.title}" onerror="this.style.display='none'">
             <div class="info">
                 <div class="title">${item.title}</div>
                 ${item.rating ? `<div class="rating">⭐ ${item.rating}</div>` : ''}
@@ -107,7 +107,7 @@ function displayItemDetail(item) {
         <button class="back-btn" onclick="showSearchResults()">← Назад к поиску</button>
         <div class="detail-content">
             <div class="detail-poster">
-                <img src="${item.thumbnailHQ || item.thumbnail}" alt="${item.name}">
+                <img src="${item.thumbnailHQ || item.thumbnail || ''}" alt="${item.name}" onerror="this.style.display='none'">
             </div>
             <div class="detail-info">
                 <h2>${item.name}</h2>
@@ -302,3 +302,4 @@ searchInput.addEventListener('keypress', (e) => {
         }
     }
 });
+
